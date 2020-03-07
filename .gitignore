@@ -29,3 +29,6 @@
 /yarn-error.log
 yarn-debug.log*
 .yarn-integrity
+/app/assets/javascripts/react_stuff/*.js
+app/assets/javascripts/react_stuff/
+package-lock.json

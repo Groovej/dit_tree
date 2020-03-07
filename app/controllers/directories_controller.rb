@@ -1,34 +1,27 @@
 class DirectoriesController < ApplicationController
-  before_action :find_directory!, only: [:show, :edit, :update, :destroy]
+  before_action :find_directory!, only: [:update, :destroy]
 
   def index
     @directories = Directory.roots
   end
 
-  def new
-    @directory = Directory.new
+  def data
+    render json: { data: Directory.all.select(:id, :name, :mpath).limit(100) }
   end
 
-  def show; end
-
-  def edit; end
-
   def create
-    Directory.create(create_params)
-
-    redirect_back(fallback_location: root_path)
+    directory = Directory.create(create_params)
+    render json: { directory: directory }
   end
 
   def update
     @directory.update(update_params)
-
-    redirect_to directory_path(@directory)
+    render json: { directory: @directory }
   end
 
   def destroy
     @directory.destroy
-
-    redirect_to action: :index
+    render json: { directory: @directory }
   end
 
   private
