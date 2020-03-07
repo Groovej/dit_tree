@@ -2,7 +2,11 @@ class DirectoriesController < ApplicationController
   before_action :find_directory!, only: [:update, :destroy]
 
   def index
-    @directories = Directory.roots
+    render 'shared'
+  end
+
+  def show
+    render 'shared'
   end
 
   def data
@@ -10,8 +14,8 @@ class DirectoriesController < ApplicationController
   end
 
   def create
-    directory = Directory.create(create_params)
-    render json: { directory: directory }
+    # directory = Directory.create(create_params)
+    # render json: { directory: directory }
   end
 
   def update

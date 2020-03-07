@@ -4,14 +4,15 @@ import { bindActionCreators } from "redux";
 import * as DirectoriesActions from "../../actions/directories/index";
 import { isEmpty } from "underscore";
 import styled from "styled-components";
-import Input from "../ui/Input";
+import Child from "../ui/Child";
+import FormGroup from "../ui/FormGroup";
 
 const Container = styled.div`
   width: 100%
   padding: 50px;
 `;
 
-class AdminRTBDashboardComponent extends React.Component {
+class DirectoriesIndexComponent extends React.Component {
   UNSAFE_componentWillMount() {
     this.props.directoriesActions.loadDirectoriesData();
   }
@@ -25,23 +26,59 @@ class AdminRTBDashboardComponent extends React.Component {
     debugger;
   };
 
+  nodeElement = item => {
+    const { directoriesActions, directories } = this.props;
+    const { children } = directories.data;
+    const nodeEntries = children.filter(
+      ({ mpath }) => parseInt(mpath[0]) === item.id
+    );
+    const formProps = {
+      propsChanged: this.addNewDirectory,
+      name: "new_form",
+      key: `root_key_for_${item.id}`,
+      parent_id: item.id
+    };
+    return (
+      <div key={`root_node_${item.id}`}>
+        <div key={`title_wrapper_for${item.id}`}>
+          {`|-- ${item.name}`}
+          <small onClick={() => directoriesActions.changePath(item.id)}>
+            &nbsp;&rarr;
+          </small>
+        </div>
+        <div
+          style={{ paddingLeft: "20px" }}
+          key={`new_form_for_elelemnt_${item.id}`}
+        >
+          <FormGroup {...formProps} />
+        </div>
+        {nodeEntries.length !== 0 && (
+          <Child parent={item} children={nodeEntries} />
+        )}
+      </div>
+    );
+  };
+
   render() {
     const { data } = this.props.directories;
     if (isEmpty(data)) {
       return false;
     }
 
-    debugger;
-    const imputProps = {
+    const { rootEntries, children } = data;
+
+    const formProps = {
       propsChanged: this.addNewDirectory,
-      name: "my_cool_name",
-      key: "input"
+      name: "new_form",
+      key: "root_key",
+      parent_id: null
     };
 
     return (
       <Container>
         <h1 key="header">Directories SPA</h1>
-        <Input {...imputProps} />
+        <FormGroup {...formProps} />
+        {rootEntries.map(item => this.nodeElement(item))}
       </Container>
     );
   }
@@ -61,4 +98,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(AdminRTBDashboardComponent);
+)(DirectoriesIndexComponent);

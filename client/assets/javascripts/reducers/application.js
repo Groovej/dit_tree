@@ -15,7 +15,7 @@ export const application = (state = initialState, action) => {
       };
     case "REQUEST_SUCCEEDED":
       const { payload: data } = action;
-      return { ...state, data, fetching: false };
+      return { ...state, data, error: false };
     default:
       return state;
   }

@@ -1,5 +1,6 @@
 import "whatwg-fetch";
-import { groupBy } from "underscore";
+import { groupBy, partition } from "underscore";
+import { push } from "react-router-redux";
 
 let currentUserToken;
 document.addEventListener("DOMContentLoaded", () => {
@@ -18,9 +19,17 @@ const loadDirectoriesData = filters => {
     })
       .catch(response => dispatch({ type: "REQUEST_FAILED" }))
       .then(response => response.json())
-      .then(({ data: payload }) => {
-        if (payload) {
-          dispatch({ type: "REQUEST_SUCCEEDED", payload });
+      .then(({ data }) => {
+        if (data) {
+          const [rootEntries, children] = partition(data, ({ mpath }) =>
+            Object.is(mpath, null)
+          );
+
+          dispatch({
+            type: "REQUEST_SUCCEEDED",
+
+            payload: { rootEntries, children }
+          });
         } else {
           dispatch({
             type: "REQUEST_FAILED",
@@ -31,4 +40,8 @@ const loadDirectoriesData = filters => {
   };
 };
 
-export { loadDirectoriesData };
+const changePath = id => {
+  return dispatch => dispatch(push(`/directories/${id}`));
+};
+
+export { loadDirectoriesData, changePath };
