@@ -1,9 +1,0 @@
-<div style="padding-left:15px">
-  <div style="display:flex">
-    <%= render partial: 'create_form', locals: { parent_id: parent.id } %>
-  </div>
-  <% children.each do |directory| %>
-    |-- <%= directory.name %> <small><%= link_to('&rarr;'.html_safe, directory) %></small>
-    <%= render partial: 'children', locals: { parent: directory, children: directory.children } %>
-  <% end %>
-</div>

@@ -1,7 +1,0 @@
-<div>
-  |-- <%= @directory.name %>
-  <small><%= link_to('&larr;'.html_safe, directories_path) %></small>
-  <small><%= link_to('&#9998;'.html_safe, edit_directory_path(@directory)) %></small>
-  <small><%= link_to('&#215;'.html_safe, @directory, method: :delete, data: { confirm: 'Do you really want to destroy it?' }) %></small>
-  <%= render partial: 'children', locals: { parent: @directory, children: @directory.children } %>
-</div>
