@@ -14,8 +14,10 @@ class DirectoriesController < ApplicationController
   end
 
   def create
-    # directory = Directory.create(create_params)
-    # render json: { directory: directory }
+    directory = Directory.create(create_params)
+    render json: {
+      directory: JSON.parse(directory.to_json).only("id", "name", "mpath")
+    }
   end
 
   def update

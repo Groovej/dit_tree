@@ -23,7 +23,7 @@ class DirectoriesIndexComponent extends React.Component {
   }
 
   addNewDirectory = props => {
-    debugger;
+    this.props.directoriesActions.addNewDirectory(props);
   };
 
   nodeElement = item => {
@@ -34,7 +34,6 @@ class DirectoriesIndexComponent extends React.Component {
     );
     const formProps = {
       propsChanged: this.addNewDirectory,
-      name: "new_form",
       key: `root_key_for_${item.id}`,
       parent_id: item.id
     };
@@ -46,14 +45,16 @@ class DirectoriesIndexComponent extends React.Component {
             &nbsp;&rarr;
           </small>
         </div>
-        <div
-          style={{ paddingLeft: "20px" }}
-          key={`new_form_for_elelemnt_${item.id}`}
-        >
+        <div style={{ paddingLeft: "20px" }} key={`new_form_for_${item.id}`}>
           <FormGroup {...formProps} />
         </div>
+
         {nodeEntries.length !== 0 && (
-          <Child parent={item} children={nodeEntries} />
+          <Child
+            parent={item}
+            children={nodeEntries}
+            directoriesActions={directoriesActions}
+          />
         )}
       </div>
     );
@@ -69,7 +70,6 @@ class DirectoriesIndexComponent extends React.Component {
 
     const formProps = {
       propsChanged: this.addNewDirectory,
-      name: "new_form",
       key: "root_key",
       parent_id: null
     };

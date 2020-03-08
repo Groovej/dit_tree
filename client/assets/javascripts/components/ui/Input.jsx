@@ -25,8 +25,9 @@ class InputComponent extends React.Component {
   inputFieldChanged = event => {
     let value = this.inputValue.current.value.trim();
     if (ENTER_KEY_CODES === event.which && value.length) {
-      const { name, propsChanged } = this.props;
-      propsChanged({ [name]: value });
+      const { name, propsChanged, parent_id } = this.props;
+      this.inputValue.current.value = "";
+      propsChanged({ name: value, parent_id });
     }
   };
 
@@ -75,7 +76,6 @@ class InputComponent extends React.Component {
 export default InputComponent;
 
 InputComponent.propTypes = {
-  name: PropTypes.string.isRequired,
   propsChanged: PropTypes.func.isRequired,
   placeholder: PropTypes.string,
   defaultValue: PropTypes.string

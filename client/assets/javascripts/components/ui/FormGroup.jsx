@@ -1,16 +1,14 @@
-import React from "react";
+import React, { memo } from "react";
 import PropTypes from "prop-types";
 import styled, { css } from "styled-components";
 import Input from "./Input";
 
-class FormGroupComponent extends React.Component {
-  render() {
-    return (
-      <div key="new_form_wrapper">
-        |--[ <Input {...this.props} /> ]
-      </div>
-    );
-  }
-}
+const FormGroupComponent = memo(props => {
+  return (
+    <div key="new_form_wrapper">
+      |--[ <Input {...props} key="input_on_form_group" /> ]
+    </div>
+  );
+});
 
 export default FormGroupComponent;

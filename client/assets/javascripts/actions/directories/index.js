@@ -44,4 +44,35 @@ const changePath = id => {
   return dispatch => dispatch(push(`/directories/${id}`));
 };
 
-export { loadDirectoriesData, changePath };
+const addNewDirectory = params => {
+  return dispatch => {
+    const path = Routes.directories_path();
+
+    fetch(path, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-Token": currentUserToken
+      },
+      credentials: "same-origin",
+      body: JSON.stringify({ directory: params })
+    })
+      .catch(response => dispatch({ type: "REQUEST_FAILED" }))
+      .then(response => response.json())
+      .then(({ directory: payload }) => {
+        if (payload) {
+          dispatch({
+            type: "DIRECTORY_ADDED_SUCCESSFULLY",
+            payload
+          });
+        } else {
+          dispatch({
+            type: "REQUEST_FAILED",
+            payload: { errorMessage: "Something went wront. Please try later" }
+          });
+        }
+      });
+  };
+};
+
+export { loadDirectoriesData, changePath, addNewDirectory };

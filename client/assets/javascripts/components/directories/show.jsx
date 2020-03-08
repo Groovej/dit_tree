@@ -28,7 +28,7 @@ class DirectoriesShowComponent extends React.Component {
     }
   }
   addNewDirectory = props => {
-    debugger;
+    this.props.directoriesActions.addNewDirectory(props);
   };
 
   shouldComponentUpdate({ directories }) {
@@ -62,7 +62,6 @@ class DirectoriesShowComponent extends React.Component {
 
     const formProps = {
       propsChanged: this.addNewDirectory,
-      name: "new_form",
       key: "root_key",
       parent_id: directory.id
     };
