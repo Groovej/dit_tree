@@ -22,6 +22,47 @@ export const application = (state = initialState, action) => {
         ? rootEntries.push(newDirectory)
         : children.push(newDirectory);
       return { ...state, data: { rootEntries, children }, error: false };
+    case "DIRECTORY_UPDATED_SUCCESSFULLY":
+      const { payload: updatedDirectory } = action;
+      let {
+        rootEntries: rootEntriesUpdated,
+        children: childrenUpdated
+      } = state.data;
+      rootEntriesUpdated.forEach(item => {
+        if (item.id === updatedDirectory.id) {
+          item.name = updatedDirectory.name;
+        }
+      });
+      childrenUpdated.forEach(item => {
+        if (item.id === updatedDirectory.id) {
+          item.name = updatedDirectory.name;
+        }
+      });
+      return {
+        ...state,
+        data: { rootEntries: rootEntriesUpdated, children: childrenUpdated },
+        error: false
+      };
+    case "DIRECTORY_DELETED_SUCCESSFULLY":
+      const { payload: deletedDirectory } = action;
+      let {
+        rootEntries: rootEntriesWithoutDeleted,
+        children: childrenWithoutDeleted
+      } = state.data;
+      rootEntriesWithoutDeleted = rootEntriesWithoutDeleted.filter(item => {
+        item.id !== deletedDirectory.id;
+      });
+      childrenWithoutDeleted = childrenWithoutDeleted.filter(item => {
+        item.id !== deletedDirectory.id;
+      });
+      return {
+        ...state,
+        data: {
+          rootEntries: rootEntriesWithoutDeleted,
+          children: childrenWithoutDeleted
+        },
+        error: false
+      };
     default:
       return state;
   }

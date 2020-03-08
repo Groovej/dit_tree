@@ -74,5 +74,71 @@ const addNewDirectory = params => {
       });
   };
 };
+const updateDirectory = ({ parent_id: id, name }) => {
+  return dispatch => {
+    const path = Routes.directory_path({ id });
 
-export { loadDirectoriesData, changePath, addNewDirectory };
+    fetch(path, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-Token": currentUserToken
+      },
+      credentials: "same-origin",
+      body: JSON.stringify({ name })
+    })
+      .catch(response => dispatch({ type: "REQUEST_FAILED" }))
+      .then(response => response.json())
+      .then(({ directory: payload }) => {
+        if (payload) {
+          dispatch({
+            type: "DIRECTORY_UPDATED_SUCCESSFULLY",
+            payload
+          });
+        } else {
+          dispatch({
+            type: "REQUEST_FAILED",
+            payload: { errorMessage: "Something went wront. Please try later" }
+          });
+        }
+      });
+  };
+};
+const deleteDirectory = id => {
+  return dispatch => {
+    const path = Routes.directory_path(id);
+
+    fetch(path, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-Token": currentUserToken
+      },
+      credentials: "same-origin"
+    })
+      .catch(response => dispatch({ type: "REQUEST_FAILED" }))
+      .then(response => response.json())
+      .then(({ directory: payload }) => {
+        if (payload) {
+          dispatch(push("/directories"));
+          dispatch({
+            type: "DIRECTORY_DELETED_SUCCESSFULLY",
+            payload
+          });
+        } else {
+          dispatch({
+            type: "REQUEST_FAILED",
+            payload: { errorMessage: "Something went wront. Please try later" }
+          });
+        }
+      });
+  };
+};
+
+export {
+  loadDirectoriesData,
+  changePath,
+  addNewDirectory,
+  updateDirectory,
+  deleteDirectory
+};
