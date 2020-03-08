@@ -16,7 +16,7 @@ class DirectoriesController < ApplicationController
   def create
     directory = Directory.create(create_params)
     render json: {
-      directory: JSON.parse(directory.to_json).only("id", "name", "mpath")
+      directory: JSON.parse(directory.to_json).slice("id", "name", "mpath")
     }
   end
 
